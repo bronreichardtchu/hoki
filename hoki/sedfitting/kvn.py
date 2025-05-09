@@ -41,7 +41,7 @@ from hoki.utils.hoki_dialogue import dialogue
 from hoki.utils.exceptions import HokiFatalError
 from hoki.utils.progressbar import print_progress_bar
 
-plt.style.use('hfs')
+#plt.style.use('hfs')
 
 ####  Some useful definitions
 
