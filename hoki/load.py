@@ -19,7 +19,12 @@ from hoki.utils.exceptions import HokiDeprecationWarning, HokiKeyError
 
 __all__ = ['model_input', 'model_output', 'set_models_path', 'unpickle']
 
-data_path = pkg_resources.resource_filename('hoki', 'data')
+try:
+    data_path = pkg_resources.resource_filename('hoki', 'data')
+except TypeError:
+    # This is a workaround for the case where the package is not installed
+    # in a way that allows pkg_resources to find it.
+    data_path = os.path.join(os.path.dirname(__file__), 'data')
 
 
 ########################

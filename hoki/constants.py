@@ -11,8 +11,12 @@ import io
 # TODO: put the constants in a dataclass!!
 # module - it will change things in the CMD jupyter notebook I think.
 
-
-data_path = pkg_resources.resource_filename('hoki', 'data')
+try:
+    data_path = pkg_resources.resource_filename('hoki', 'data')
+except TypeError:
+    # This is a workaround for the case where the package is not installed
+    # in a way that allows pkg_resources to find it.
+    data_path = os.path.join(os.path.dirname(__file__), 'data')
 path_to_settings = os.path.join(data_path, 'settings.yaml')
 
 with open(os.path.relpath(path_to_settings), 'rb') as stream:
