@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import os
+import re
 import pickle
 from scipy import ndimage
 
@@ -307,7 +308,13 @@ class PpxfWizard(HokiObject):
         # index k (for the metallicity location in stars_tempaltes), and file path
         for k, path in enumerate(self.bpass_list_spectra):
             # string to identify the metallicity, like 'z040' above
-            met = self.num_z_list[np.argwhere(np.array(self.z_list)==path[-8:-4])[0][0]]
+            met_match = re.search(r'z\w{3}', path)
+            if met_match:
+                spec_met = met_match.group(0)
+                met = self.num_z_list[np.argwhere(np.array(self.z_list)==spec_met)[0][0]]
+            else:
+                raise HokiFatalError(f"Couldn't find the metallicity in the file name {path} \n\n{dialogue.debugger()}"
+                                     f"Please check that the file name contains a valid metallicity string, e.g. 'z020'")
 
             # load the file corresponding to that metallicity
             # getting the SSPs for metallciity at index k
