@@ -174,15 +174,14 @@ class PpxfWizard(HokiObject):
             self.z_list=BPASS_METALLICITIES
             self.num_z_list=BPASS_NUM_METALLICITIES
 
-
-        not_you=[]
+        # Check that the metallicities are in the list of BPASS metallicities
+        these_spectra = []
         for filepath in self.bpass_list_spectra:
-            if filepath[-8:-4] not in self.z_list:
-                not_you.append(filepath)
-
-        self.bpass_list_spectra = list(set(self.bpass_list_spectra)-set(not_you))
-        self.bpass_list_spectra.sort() # need to sort again so metallicities are in ascending order consistently
-        # TODO: make a mask: if {met} in "path" and apply to bpass_list_spectra
+            if any(met in filepath for met in self.z_list):
+                these_spectra.append(filepath)
+        self.bpass_list_spectra = these_spectra
+        # sort the spectra list so that the metallicities are in ascending order
+        self.bpass_list_spectra.sort()
 
         #self.wl_range_tem = np.array((10**self.log_wl_obs)[[0,-1]].astype(int))
         if wl_obs is None and log_wl_obs is None:
