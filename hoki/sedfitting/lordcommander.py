@@ -151,32 +151,32 @@ class LordCommander(HokiObject):
             # RECORDS RESULTS
             los_vel, disp = self.kvn.ppxf.sol[0], self.kvn.ppxf.sol[1]
             # DYNAMICS: Table recording the dynamic information of the fits.
-            self.DYNAMICS = self.DYNAMICS.append(pd.DataFrame([[los_vel, disp]], columns=['los', 'disp']))
+            self.DYNAMICS = pd.concat([self.DYNAMICS, pd.DataFrame([[los_vel, disp]], columns=['los', 'disp'])])
 
             # BEST_FIT: table containing the full fits
             # made up of "matching spectra" according to the "weights" in SFH and the polynomial component if applicable
 
-            self.BEST_FIT = self.BEST_FIT.append(pd.DataFrame([self.kvn.ppxf.bestfit], columns=self.wl_fits))
+            self.BEST_FIT = pd.concat([self.BEST_FIT, pd.DataFrame([self.kvn.ppxf.bestfit], columns=self.wl_fits)])
 
             # SFH: Table containing the ages weights and metalicities of each component
-            self.SFH = self.SFH.append(self.kvn.results)
+            self.SFH = pd.concat([self.SFH, self.kvn.results])
             self.bin_id_sfh += [i] * self.kvn.results.shape[
                 0]  # record bin number / len of list == Num [ages, mets] needed
 
             # MATCH_SPECTRA: Table containing the spectra needed to create a matching "best_fit"
-            self.MATCH_SPECTRA = self.MATCH_SPECTRA.append(pd.DataFrame(self.kvn.matching_spectra,
-                                                                        columns=self.wl_fits))
+            self.MATCH_SPECTRA = pd.concat([self.MATCH_SPECTRA, pd.DataFrame(self.kvn.matching_spectra,
+                                                                        columns=self.wl_fits)])
             self.bin_id_spec += [i] * self.kvn.matching_spectra.shape[0]  # same as bins above
 
             # Polynomial components. Won't always be present so check if exist first.
             if self.kvn.matching_apolynomial is not None:
-                self.MATCH_APOLY = self.MATCH_APOLY.append(pd.DataFrame([self.kvn.matching_apolynomial],
-                                                                        columns=self.wl_fits))
+                self.MATCH_APOLY = pd.concat([self.MATCH_APOLY, pd.DataFrame([self.kvn.matching_apolynomial],
+                                                                        columns=self.wl_fits)])
                 self.bin_id_apoly += [i]  # there is only every one polynomial
 
             if self.kvn.matching_mpolynomial is not None:
-                self.MATCH_MPOLY = self.MATCH_MPOLY.append(pd.DataFrame([self.kvn.matching_mpolynomial],
-                                                                        columns=self.wl_fits))
+                self.MATCH_MPOLY = pd.concat([self.MATCH_MPOLY, pd.DataFrame([self.kvn.matching_mpolynomial],
+                                                                        columns=self.wl_fits)])
                 self.bin_id_mpoly += [i]  # there is only every one polynomial
             i += 1
         
